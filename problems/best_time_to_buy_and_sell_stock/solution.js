@@ -2,13 +2,14 @@
  * @param {number[]} prices
  * @return {number}
  */
-const maxProfit = function(prices) {
-    let min = prices[0]
-    let res = 0
-    let len = prices.length
-    for (let x = 1; x < len; x++) {
-        res = Math.max(res, prices[x] - min)
-        min = Math.min(prices[x], min)
+const maxProfit = (prices) => {
+    let max = 0
+    let min = 10_000
+    
+    for (const price of prices) {
+        if (price < min) min = price
+        else max = Math.max(max, price - min);
     }
-    return res
+    
+    return max    
 };
