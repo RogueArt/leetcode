@@ -3,17 +3,22 @@
  * @param {number} target
  * @return {number[]}
  */
-var twoSum = function(nums, target) {
-    const previousValues = {}
-    const len = nums.length
-    for (let x = 0; x < len; x++) {
-        const val = target - nums[x]
-        const oldIndex = previousValues[val]
-        if (oldIndex != null) {
-           return [oldIndex, x]
-        }
-        else {
-            previousValues[nums[x]] = x
+const twoSum = (nums, target) => {
+    // Create an object from the array where
+    // (key, value) = (num, index)
+    let diffs = {}
+    for (const [idx, num] of nums.entries()) {
+        diffs[num] = idx
+    }
+    
+    // Go through each number
+    // Try to find "missing" number in the diffs hashmap
+    for (const [idx, num] of nums.entries()) {
+        const diff = target - num
+        const diffIdx = diffs[diff]
+        
+        if (diffIdx && idx !== diffIdx) {
+            return [diffIdx, idx] 
         }
     }
 };
