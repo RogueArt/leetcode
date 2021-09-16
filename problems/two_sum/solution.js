@@ -4,21 +4,18 @@
  * @return {number[]}
  */
 const twoSum = (nums, target) => {
-    // Create an object from the array where
-    // (key, value) = (num, index)
-    let diffs = {}
+    // Build a hashmap from the numbers in the array
+    let map = {}
     for (const [idx, num] of nums.entries()) {
-        diffs[num] = idx
+        map[num] = idx
     }
     
-    // Go through each number
-    // Try to find "missing" number in the diffs hashmap
+    // Go through each number in array
     for (const [idx, num] of nums.entries()) {
+        // Check if the difference exists in hashmap
         const diff = target - num
-        const diffIdx = diffs[diff]
         
-        if (diffIdx && idx !== diffIdx) {
-            return [diffIdx, idx] 
-        }
+        // If it does, return it
+        if (map[diff] !== undefined && map[diff] !== idx) return [idx, map[diff]]
     }
 };
