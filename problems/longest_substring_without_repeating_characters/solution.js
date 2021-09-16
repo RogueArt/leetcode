@@ -3,41 +3,33 @@
  * @return {number}
  */
 const lengthOfLongestSubstring = (s) => {
+    // Use sliding window approach
+    let [left, right, maxLen] = [0, 0, 0]
+    
     const len = s.length
-    if (len === 0 || len === 1) return len
-    
-    let [left, right, maxLen] = [0, 0, 1]    
-    let seenChars = {}
-    
-    // Used for O(1) tracking length
-    seenChars.length = 0
-    
-    // Make sure pointer doesn't go outside of array
-    while (right < s.length) {
-        const [leftChar, rightChar] = [s[left], s[right]]
-
-        // Seen chars hasn't seen the right char, so add it
-        if (!seenChars[rightChar]) {
-            // Add right char to hashmap, update size
-            seenChars[rightChar] = true
-            seenChars.length += 1
-            
-            // Move right pointer more to right           
+    const map = {}
+    while (right < len) {
+        const leftChar = s[left]
+        const rightChar = s[right]
+        
+        // Haven't seen character before
+        if (!map[rightChar]) {
+            // Grow the window
             right += 1
+            maxLen = Math.max(right - left, maxLen)           
             
-            // Set max to whatever hashmap size is
-            maxLen = Math.max(seenChars.length, maxLen)
+            // Add character at right to hashmap
+            map[rightChar] = true
         }
         
-        // Already saw the character
+        // Character is repeated
         else {
-            // Set character in object as unseen, reduce length
-            seenChars[leftChar] = false
-            seenChars.length -= 1
-            
-            // Move left pointer more to right
+            // Shrink window by one to the left
             left += 1
-        }       
+            
+            // Set left character as unseen
+            map[leftChar] = false
+        }
     }
     
     return maxLen
