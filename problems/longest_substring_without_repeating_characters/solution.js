@@ -3,34 +3,38 @@
  * @return {number}
  */
 const lengthOfLongestSubstring = (s) => {
-    // Use sliding window approach
-    let [left, right, maxLen] = [0, 0, 0]
+    let [left, right] = [0, 0]
     
-    const len = s.length
-    const map = {}
-    while (right < len) {
-        const leftChar = s[left]
-        const rightChar = s[right]
+    let maxLen = 0
+    const frequency = {}
+    while (right < s.length) {
+        const rCh = s[right]
         
-        // Haven't seen character before
-        if (!map[rightChar]) {
-            // Grow the window
-            right += 1
-            maxLen = Math.max(right - left, maxLen)           
+        // Make sure character exists in hashmap before incrementing
+        if (rCh in frequency === false) frequency[rCh] = 0
+        
+        // Increment frequency
+        frequency[rCh] += 1
+        
+        // If we have more than 1 char here
+        while (frequency[rCh] > 1) {
+            const lCh = s[left]
             
-            // Add character at right to hashmap
-            map[rightChar] = true
+            left += 1            
+            frequency[lCh] -= 1
         }
         
-        // Character is repeated
-        else {
-            // Shrink window by one to the left
-            left += 1
-            
-            // Set left character as unseen
-            map[leftChar] = false
-        }
+        // Get the maximum length between strings
+        maxLen = Math.max(maxLen, right - left + 1)
+        
+        // Always move one to the right
+        right += 1
     }
     
     return maxLen
 };
+
+// abca
+// baca
+// aca
+// ca
