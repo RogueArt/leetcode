@@ -3,24 +3,20 @@
  * @return {number[]}
  */
 const findBuildings = (heights) => {
-    const tallest = new Array(heights.length).fill(0)
+    const len = heights.length
+    let tallest = heights[len - 1]
     
-    // Iterate tallest in reverse order
-    tallest[tallest.length - 1] = heights[heights.length - 1]
-    for (let x = tallest.length - 2; x >= 0; x -= 1) {
-        tallest[x] = Math.max(heights[x+1], tallest[x+1])
-    }
-
-    // Store answers in a stack
-    const res = []
-    for (let x = 0; x < heights.length; x += 1) {
-        if (heights[x] > tallest[x]) res.push(x)
+    // Last value can always see ocean
+    const res = [len-1]
+    
+    // Iterate in backwards order
+    for (let x = len - 2; x >= 0; x--) {
+        if (heights[x] > tallest) res.push(x) 
+        tallest = Math.max(tallest, heights[x])
     }
     
-    // Last building can always see it
-    res.push(heights.length - 1)
-
-    return res
+    // Reverse array so it's in increasing order
+    return res.reverse()
 };
 
 // Naive solution:
