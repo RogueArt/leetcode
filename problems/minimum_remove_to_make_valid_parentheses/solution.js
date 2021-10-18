@@ -3,39 +3,41 @@
  * @return {string}
  */
 const minRemoveToMakeValid = (s) => {
-    let [str, result, open] = ["", "", 0]
-
-    // Go through each char
+    // Go through remove excess ) parentheses
+    let removedRight = ''
+    let openCount = 0
     for (const ch of s) {
-        // Saw an opening parenthesis
-        if (ch === '(') open += 1
+        // Increase open count every time we see an opening parenthesis
+        if (ch === '(') openCount += 1
         
-        // Saw a closed parenthesis
+        // Decrease open count every time we see a closed parenthesis
         if (ch === ')') {
-            // Continue if closed parenthesis without opening
-            if (open === 0) continue
-            open -= 1
+            // If more closing parentheses than open, ignore
+            if (openCount === 0) continue
+            openCount -= 1
         }
         
-        // Concatenate char to string
-        str += ch
+        // Add characters to the string
+        removedRight += ch
     }
     
-    // Now deal with opening parentheses at end
-    const res = []
-    for (let x = str.length - 1; x >= 0; x -= 1) {
-        const ch = str[x]
-        
-        // Don't append if opening parenthesis & is extra
-        if (ch === '(' && open > 0) {
-            // Decrement # of extra ('s remaining
-            open -= 1
+    let res = ''
+    // Iterate backwards, remove excess ( parentheses
+    for (let x = removedRight.length - 1; x >= 0; x -= 1) {
+        const ch = removedRight[x]
+        if (ch === '(' && openCount > 0) {
+            openCount -= 1
             continue
         }
         
-        // Add char to char array
-        res.push(ch)
+        res += ch
     }
     
-    return res.reverse().join('')
+    return res.split('').reverse().join('')
 };
+
+// ))((
+
+// ()()
+// ()(()
+// ()(())
