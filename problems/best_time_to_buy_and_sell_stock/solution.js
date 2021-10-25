@@ -4,12 +4,15 @@
  */
 const maxProfit = (prices) => {
     let max = 0
-    let min = 10_000
+    let min = Number.MAX_SAFE_INTEGER
     
     for (const price of prices) {
+       // Found a value smaller than smallest seen
         if (price < min) min = price
-        else max = Math.max(max, price - min);
+        
+        // Calculate profit of selling today
+        else max = Math.max(max, price - min)
     }
     
-    return max    
+    return max
 };
