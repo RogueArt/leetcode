@@ -1,19 +1,25 @@
 class Solution {
 public:
+    // dp[i][j] = s[i, j] is palindrome
     string longestPalindrome(string s) {
-      // check palindromes centered at i/2
-      int idx = 0, len = 0;
-      for (int i = 0; i < 2*s.size(); ++i) {
-        int p1, p2;
-        if (i % 2 == 0) { p1 = p2 = i/2; }
-        else { p1 = i/2; p2 = (i+1)/2; }
-        while (p1 >= 0 && p2 < s.size()) {
-          if (s[p1] == s[p2]) { p1--; p2++; }
-          else break;
-        }
-        p1++; p2--;
-        if (p2 - p1 + 1 > len) { idx = p1; len = p2-p1+1; }
+      bool dp[s.size()][s.size()];
+      for (int i = 0; i < s.size(); ++i) {
+        dp[i][i] = true;
+        if (i != s.size()-1) dp[i][i+1] = s[i] == s[i+1] ? true : false;
       }
-      return s.substr(idx, len);
+      for (int j = 2; j < s.size(); ++j) {
+        for (int i = 0; i < s.size()-1 && i+j < s.size(); ++i) {
+          dp[i][i+j] = dp[i+1][i+j-1] && s[i] == s[i+j] ? true : false;
+        }
+      }
+      int mxLo, mxHi; mxLo = mxHi = 0;
+      for (int i = 0; i < s.size(); ++i) {
+        for (int j = i; j < s.size(); ++j) {
+          if (dp[i][j] && j-i+1 > mxHi-mxLo+1) {
+            mxLo = i; mxHi = j;
+          }
+        }
+      }
+      return s.substr(mxLo, mxHi-mxLo+1);
     }
 };
