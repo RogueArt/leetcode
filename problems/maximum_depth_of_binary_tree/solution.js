@@ -10,16 +10,15 @@
  * @param {TreeNode} root
  * @return {number}
  */
-const maxDepth = (root) => {
-    return getHeight(root, 0)
+function maxDepth(root) {    
+    return getDepth(root, 0)
 };
 
-function getHeight(node, height) {
-    if (node === null) return height
+function getDepth(root, depth) {
+    if (root === null) return depth
+
+    const leftDepth = getDepth(root.left, depth + 1)
+    const rightDepth = getDepth(root.right, depth + 1)
     
-    // Get the max of left and right heights
-    const leftHeight = getHeight(node.left, height + 1)
-    const rightHeight = getHeight(node.right, height + 1)
-    
-    return Math.max(leftHeight, rightHeight)    
+    return Math.max(leftDepth, rightDepth)
 }
