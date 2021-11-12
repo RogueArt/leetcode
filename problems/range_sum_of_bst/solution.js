@@ -12,21 +12,20 @@
  * @param {number} high
  * @return {number}
  */
+function rangeSumBST(root, low, high) {
+    return performRangeSumBST(root, low, high, 0)
+};
 
-const rangeSumBST = (root, low, high) => {
-    return dfs(root, low, high, 0);
-}
-
-function dfs(root, low, high) {
+function performRangeSumBST(root, low, high, sum) {
     if (root === null) return 0
     
-    let result = 0
-    const val = root.val
-    if (low <= val && val <= high) result += val
+    // If value is between low and high inclusive, add it to sum
+    const addToSum = (low <= root.val && root.val <= high) ? root.val : 0
     
-    result += dfs(root.right, low, high, result)
-    result += dfs(root.left, low, high, result)
-
-    return result
+    // Get left and right sums
+    const leftSum = performRangeSumBST(root.left, low, high, sum)
+    const rightSum = performRangeSumBST(root.right, low, high, sum)
+       
+    // Return left sum, right sum, and possibly the current value added
+    return leftSum + rightSum + addToSum
 }
-
