@@ -3,18 +3,25 @@
  * @return {number}
  */
 const minAddToMakeValid = (s) => {
-    let count = 0
-    let invalidCount = 0
+    // Keep track of two counts:
+    // 1) Track how many open parentheses there are
+    // 2) Track how many parentheses are invalid
+    
+    let [openCount, invalidCount] = [0, 0]
+    
     for (const ch of s) {
-        if (ch === '(') count += 1
+        // Character is opening parenthesis
+        if (ch === '(') openCount += 1
+        
+        // Character is closing parenthesis
         if (ch === ')') {
-            if (count === 0) {
-                invalidCount += 1
-                continue
-            }
-            count -= 1
+            // Extra closing parenthesis, add to invalid count
+            if (openCount === 0) invalidCount += 1
+                
+            // Otherwise, close one of the open parentheses
+            else openCount -= 1
         }
     }
     
-    return invalidCount + count
+    return invalidCount + openCount
 };
