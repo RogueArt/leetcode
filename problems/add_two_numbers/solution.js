@@ -10,44 +10,29 @@
  * @param {ListNode} l2
  * @return {ListNode}
  */
-
-function linkedListToVal(list) {
-    let val = BigInt(0)
-    let count = BigInt(0)
-    
-    // Traverse through linked list
-    while (list != undefined) {
-        // Add value to stack as power of 10
-        val += BigInt(list.val) * (BigInt(10) ** count)
-        count += BigInt(1)
-        
-        // Go to next node
-        list = list.next
-    }
-    return val
-}
-
 const addTwoNumbers = (l1, l2) => {
-    let sum = linkedListToVal(l1) + linkedListToVal(l2)
-    console.log(linkedListToVal(l1), linkedListToVal(l2))
+    let sum = 0
+    let carry = 0
     
-    // Create the first head node
-    const head = new ListNode(sum % BigInt(10))
-    sum /= BigInt(10)
+    const head = new ListNode()
+    let res = head
+    while (l1 !== null || l2 !== null) {
+        const a = (l1 !== null) ? l1.val : 0
+        const b = (l2 !== null) ? l2.val : 0
+        
+        const sumOfBoth = a + b + carry
+        
+        res.next = new ListNode(sumOfBoth % 10)
+        res = res.next
     
-    // Go through rest of values    
-    let pointer = head
-    while (sum !== BigInt(0)) {
-        // Get the remainder, floor the sum
-        let remainder = sum % BigInt(10)
-        sum /= BigInt(10)
+        carry = Math.floor(sumOfBoth / 10)
         
-        // Create a new node for next 
-        pointer.next = new ListNode(remainder)
-        
-        // Set pointer to next
-        pointer = pointer.next        
+        // Go to the child node
+        if (l1 !== null) l1 = l1.next
+        if (l2 !== null) l2 = l2.next
     }
     
-    return head
+    if (carry > 0) res.next = new ListNode(carry)
+        
+    return head.next
 };
