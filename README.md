@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="images/leetcode_sync.png" width="250"/>
+    <img src="https://github.com/joshcai/leetcode-sync/blob/master/images/leetcode_sync.png" width="250"/>
 </p>
 
 # About
