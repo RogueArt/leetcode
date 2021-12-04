@@ -2,32 +2,37 @@
  * @param {number[][]} intervals
  * @return {number[][]}
  */
-const merge = (intervals) => {
-    // Sort the intervals by start value
+function merge(intervals) {
+    // Sort the intervals by start and end time
     intervals.sort((a, b) => a[0] - b[0])
     
-    // Push the first interval onto stack
-    const res = []
-    res.push(intervals[0])
+    // Base case: only one interval in array
+    if (intervals.length === 1) return intervals
     
-    // Go through each interval, check if can merge
+    const mergedIntervals = []
+    
+    // Push the first interval to merged intervals
+    mergedIntervals.push(intervals[0])
+    
     for (const interval of intervals) {
-        // Check if mergeable with stack top
-        const topInterval = res[res.length - 1]
+        const topInterval = mergedIntervals[mergedIntervals.length - 1]
         
-        // Current interval mergeable with top
+        // Only merge interval if end time of top >= start time of next
         if (topInterval[1] >= interval[0]) {
-            const upper = Math.max(topInterval[1], interval[1])
+            const start = topInterval[0]
             
-            // Replace top with merged interval
-            const mergedInterval = [topInterval[0], upper]
-            res.pop()
-            res.push(mergedInterval)
+            // End time is maximum of both end times
+            const end = Math.max(topInterval[1], interval[1])
+            const mergedInterval = [start, end]
+            
+            // Remove the top interval, replace it with merged
+            mergedIntervals.pop()
+            mergedIntervals.push(mergedInterval)
         }
         
-        // Otherwise push interval to stack
-        else res.push(interval)
+        // Otherwise just add it to list
+        else mergedIntervals.push(interval)
     }
     
-    return res
+    return mergedIntervals
 };
