@@ -3,25 +3,24 @@
  * @param {number} truckSize
  * @return {number}
  */
-const maximumUnits = (boxTypes, truckSize) => {
-    // Sort by number of units in descending order
+function maximumUnits(boxTypes, truckSize) {
+    // Sort by highest units first
     boxTypes.sort((a, b) => b[1] - a[1])
-    
-    // Go through each box, try to fill up truck
-    let total = 0
-    for (const box of boxTypes) {
-        let [numBoxes, units] = box
         
-        // Add to total until number of boxes hits zero
-        while (numBoxes > 0 && truckSize > 0) {
-            total += units
-            numBoxes -= 1
-            truckSize -= 1
-        }
+    // Go through until truck is full
+    let boxIndex = 0
+    const len = boxTypes.length
     
-        // If truck size becomes 0, early return
-        if (truckSize === 0) return total
+    let maxUnits = 0
+    while (truckSize > 0 && boxIndex < len) {    
+        const [numBoxes, numUnits] = boxTypes[boxIndex]
+                
+        // Decrement truck size by whichever is smaller: number of boxes or truck size
+        const totalBoxes = Math.min(numBoxes, truckSize)
+        truckSize -= totalBoxes
+        maxUnits += totalBoxes * numUnits
+        boxIndex += 1
     }
     
-    return total
+    return maxUnits
 };
