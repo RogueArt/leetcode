@@ -1,25 +1,22 @@
 class Solution {
 public:
-    // dp[i][j] = s[i, j] is palindrome
     string longestPalindrome(string s) {
-      bool dp[s.size()][s.size()];
-      for (int i = 0; i < s.size(); ++i) {
-        dp[i][i] = true;
-        if (i != s.size()-1) dp[i][i+1] = s[i] == s[i+1] ? true : false;
-      }
-      for (int j = 2; j < s.size(); ++j) {
-        for (int i = 0; i < s.size()-1 && i+j < s.size(); ++i) {
-          dp[i][i+j] = dp[i+1][i+j-1] && s[i] == s[i+j] ? true : false;
+        bool dp[s.size()+1][s.size()];
+        // dp[i][j]: str from [j, j+i]
+        memset(dp, 0, sizeof(dp));
+        memset(dp[1], 1, sizeof(dp[0]));
+        int p1 = 0, p2 = 0;
+        for (int i = 2; i <= s.size(); ++i) {
+            for (int j = i-1; j < s.size(); ++j) {
+                if (s[j] == s[j-i+1] && (i == 2 || dp[i-2][j-1])) {
+                    if (i > p2-p1+1) {
+                        p1 = j-i+1;
+                        p2 = j;
+                    }
+                    dp[i][j] = 1;
+                }
+            }
         }
-      }
-      int mxLo, mxHi; mxLo = mxHi = 0;
-      for (int i = 0; i < s.size(); ++i) {
-        for (int j = i; j < s.size(); ++j) {
-          if (dp[i][j] && j-i+1 > mxHi-mxLo+1) {
-            mxLo = i; mxHi = j;
-          }
-        }
-      }
-      return s.substr(mxLo, mxHi-mxLo+1);
+        return s.substr(p1, p2-p1+1);
     }
 };
